@@ -1,0 +1,66 @@
+{
+	"name": "Incremental Load",
+	"properties": {
+		"activities": [
+			{
+				"name": "Last update date",
+				"type": "Lookup",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select last_load from watermarktable",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_azuresql",
+						"type": "DatasetReference",
+						"parameters": {
+							"table_name": "watermarktable"
+						}
+					}
+				}
+			},
+			{
+				"name": "current date",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select max(Date_id) as maxdateid from Source_SalesData",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_azuresql",
+						"type": "DatasetReference",
+						"parameters": {
+							"table_name": "Source_SalesData"
+						}
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}
