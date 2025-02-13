@@ -52,7 +52,10 @@
 				"outputs": [
 					{
 						"referenceName": "ds_azuresql",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"table_name": "Source_SalesData"
+						}
 					}
 				]
 			}
